@@ -1,0 +1,829 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Noah">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="IOS加密标准库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OC加密标准库">
+<meta property="og:url" content="https://ox130e07d.github.io/2024/03/29/OC%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86%E5%BA%931/index.html">
+<meta property="og:site_name" content="0xSec">
+<meta property="og:description" content="IOS加密标准库">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ox130e07d.github.io/img/default1.png">
+<meta property="article:published_time" content="2024-03-28T17:35:21.000Z">
+<meta property="article:modified_time" content="2024-03-28T17:48:32.631Z">
+<meta property="article:author" content="Noah">
+<meta property="article:tag" content="IOS逆向">
+<meta property="article:tag" content="密码学">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ox130e07d.github.io/img/default1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OC加密标准库 - 0xSec</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ox130e07d.github.io","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong> </strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OC加密标准库"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-03-29 01:35" pubdate>
+          2024年3月29日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          54 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OC加密标准库</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="创建IOS工程"><a href="#创建IOS工程" class="headerlink" title="创建IOS工程"></a>创建IOS工程</h1><p><img src="https://cdn.nlark.com/yuque/0/2024/png/32697134/1711544956286-cb84153b-37b9-4e75-aea9-b575570ce8a3.png#averageHue=%23dcdfde&clientId=uacb4e6bb-6156-4&from=paste&height=265&id=u6f950a63&originHeight=398&originWidth=985&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=253741&status=done&style=none&taskId=u397014bc-6c67-4bb9-afa2-1f59c96229b&title=&width=656.6666666666666" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h1 id="Hex编码"><a href="#Hex编码" class="headerlink" title="Hex编码"></a>Hex编码</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">// 导入 Foundation 框架</span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><br><span class="hljs-comment">// 函数声明：将字符串转换为十六进制编码</span><br><span class="hljs-built_in">NSString</span>* stringToHex(<span class="hljs-built_in">NSString</span> *inputString) &#123;<br>    <span class="hljs-comment">// 将输入字符串转换为 NSData 对象</span><br>    <span class="hljs-built_in">NSData</span> *data = [inputString dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <br>    <span class="hljs-comment">// 创建一个 NSMutableString 用于存储十六进制编码</span><br>    <span class="hljs-built_in">NSMutableString</span> *hexString = [<span class="hljs-built_in">NSMutableString</span> stringWithCapacity:data.length * <span class="hljs-number">2</span>];<br>    <br>    <span class="hljs-comment">// 遍历数据字节，将每个字节转换为十六进制字符串</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *bytes = (<span class="hljs-keyword">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)data.bytes;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">NSUInteger</span> i = <span class="hljs-number">0</span>; i &lt; data.length; i++) &#123;<br>        [hexString appendFormat:<span class="hljs-string">@&quot;%02X&quot;</span>, bytes[i]];<br>    &#125;<br>    <br>    <span class="hljs-comment">// 返回转换后的十六进制字符串</span><br>    <span class="hljs-keyword">return</span> [hexString <span class="hljs-keyword">copy</span>];<br>&#125;<br><br><span class="hljs-comment">// 示例用法</span><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入字符串</span><br>        <span class="hljs-built_in">NSString</span> *inputString = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <br>        <span class="hljs-comment">// 将输入字符串转换为十六进制编码</span><br>        <span class="hljs-built_in">NSString</span> *hexString = stringToHex(inputString);<br>        <br>        <span class="hljs-comment">// 输出转换后的十六进制编码</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Hexadecimal encoding: %@&quot;</span>, hexString);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="Base64编码"><a href="#Base64编码" class="headerlink" title="Base64编码"></a>Base64编码</h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-comment">// 导入 Foundation 框架</span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><br><span class="hljs-comment">// 函数声明：将字符串转换为 Base64 编码</span><br><span class="hljs-built_in">NSString</span>* stringToBase64(<span class="hljs-built_in">NSString</span> *inputString) &#123;<br>    <span class="hljs-comment">// 将输入字符串转换为 NSData 对象</span><br>    <span class="hljs-built_in">NSData</span> *data = [inputString dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <br>    <span class="hljs-comment">// 进行 Base64 编码</span><br>    <span class="hljs-built_in">NSString</span> *base64String = [data base64EncodedStringWithOptions:<span class="hljs-number">0</span>];<br>    <br>    <span class="hljs-comment">// 返回 Base64 编码后的字符串</span><br>    <span class="hljs-keyword">return</span> base64String;<br>&#125;<br><br><span class="hljs-comment">// 示例用法</span><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入字符串</span><br>        <span class="hljs-built_in">NSString</span> *inputString = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <br>        <span class="hljs-comment">// 将输入字符串转换为 Base64 编码</span><br>        <span class="hljs-built_in">NSString</span> *base64String = stringToBase64(inputString);<br>        <br>        <span class="hljs-comment">// 输出转换后的 Base64 编码</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Base64 encoding: %@&quot;</span>, base64String);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="哈希算法"><a href="#哈希算法" class="headerlink" title="哈希算法"></a>哈希算法</h1><p>算法特点<br>:::info<br>1、不同长度的输入，产生固定长度的输出<br>2、散列后的密文不可逆<br>3、散列后的结果唯一<br>4、哈希碰撞<br>5、一般用于校验数据的完整性，签名Sign<br>:::</p>
+<p>常见算法<br>:::info<br>MD5、SHA1、SHA256、SHA512、HmacMD5、HmacSHA1、HmacSHA256等<br>:::</p>
+<p>一般消息摘要算法会将加密后的字节数组进行Hex编码，对称加密使用Base64编码。</p>
+<h2 id="MD5"><a href="#MD5" class="headerlink" title="MD5"></a>MD5</h2><h3 id="CC-MD5"><a href="#CC-MD5" class="headerlink" title="CC_MD5"></a>CC_MD5</h3><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonDigest.h&gt;</span></span><br><span class="hljs-comment">// 函数声明：对字符串进行 MD5 加密</span><br><span class="hljs-built_in">NSString</span>* md5(<span class="hljs-built_in">NSString</span> *inputString) &#123;<br>    <span class="hljs-comment">// 将输入字符串转换为 UTF-8 编码的数据</span><br>    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *cStr = [inputString UTF8String];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> digest[CC_MD5_DIGEST_LENGTH];<br>    <br>    <span class="hljs-comment">// 计算 MD5 哈希值</span><br>    CC_MD5(cStr, (CC_LONG)strlen(cStr), digest);<br>    <br>    <span class="hljs-comment">// 将哈希值转换为字符串</span><br>    <span class="hljs-built_in">NSMutableString</span> *outputString = [<span class="hljs-built_in">NSMutableString</span> stringWithCapacity:CC_MD5_DIGEST_LENGTH * <span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; CC_MD5_DIGEST_LENGTH; i++) &#123;<br>        [outputString appendFormat:<span class="hljs-string">@&quot;%02x&quot;</span>, digest[i]];<br>    &#125;<br>    <br>    <span class="hljs-comment">// 返回 MD5 加密后的字符串</span><br>    <span class="hljs-keyword">return</span> [outputString <span class="hljs-keyword">copy</span>];<br>&#125;<br><br><span class="hljs-comment">// 示例用法</span><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入字符串</span><br>        <span class="hljs-built_in">NSString</span> *inputString = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <br>        <span class="hljs-comment">// 对输入字符串进行 MD5 加密</span><br>        <span class="hljs-built_in">NSString</span> *md5String = md5(inputString);<br>        <br>        <span class="hljs-comment">// 输出加密后的结果</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;MD5: %@&quot;</span>, md5String);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="CC-MD5-CTX"><a href="#CC-MD5-CTX" class="headerlink" title="CC_MD5_CTX"></a>CC_MD5_CTX</h3><p>要使用 <code>CC_MD5_CTX</code> 进行 MD5 加密，你需要手动管理 MD5 算法的上下文，并使用相关的函数来更新上下文和获取最终的哈希值。以下是一个示例代码，演示了如何使用 <code>CC_MD5_CTX</code> 进行 MD5 加密：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonDigest.h&gt;</span></span><br><br><span class="hljs-comment">// 函数声明：计算字符串的 MD5 哈希值</span><br><span class="hljs-built_in">NSString</span>* md5WithCTX(<span class="hljs-built_in">NSString</span> *inputString) &#123;<br>    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *cStr = [inputString UTF8String];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> digest[CC_MD5_DIGEST_LENGTH];<br>    <br>    <span class="hljs-comment">// 初始化 MD5 上下文</span><br>    CC_MD5_CTX ctx;<br>    CC_MD5_Init(&amp;ctx);<br>    <br>    <span class="hljs-comment">// 更新 MD5 上下文</span><br>    CC_MD5_Update(&amp;ctx, cStr, (CC_LONG)strlen(cStr));<br>    <br>    <span class="hljs-comment">// 获取 MD5 哈希值</span><br>    CC_MD5_Final(digest, &amp;ctx);<br>    <br>    <span class="hljs-comment">// 将哈希值转换为字符串</span><br>    <span class="hljs-built_in">NSMutableString</span> *outputString = [<span class="hljs-built_in">NSMutableString</span> stringWithCapacity:CC_MD5_DIGEST_LENGTH * <span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; CC_MD5_DIGEST_LENGTH; i++) &#123;<br>        [outputString appendFormat:<span class="hljs-string">@&quot;%02x&quot;</span>, digest[i]];<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> [outputString <span class="hljs-keyword">copy</span>];<br>&#125;<br><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入字符串</span><br>        <span class="hljs-built_in">NSString</span> *inputString = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <br>        <span class="hljs-comment">// 计算字符串的 MD5 哈希值</span><br>        <span class="hljs-built_in">NSString</span> *md5String = md5WithCTX(inputString);<br>        <br>        <span class="hljs-comment">// 输出 MD5 哈希值</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;MD5: %@&quot;</span>, md5String);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们手动创建了一个 <code>CC_MD5_CTX</code> 结构体实例 <code>ctx</code>，并使用 <code>CC_MD5_Init</code> 函数初始化了 MD5 上下文。然后，我们使用 <code>CC_MD5_Update</code> 函数更新了上下文，传入要计算哈希值的数据。最后，使用 <code>CC_MD5_Final</code> 函数获取最终的 MD5 哈希值。<br>需要注意的是，在使用 <code>CC_MD5_CTX</code> 进行 MD5 加密时，你需要手动管理 MD5 算法的上下文，包括初始化、更新和获取最终的哈希值。这种方式相对于直接调用 <code>CC_MD5</code> 函数更加底层和灵活，但也需要更多的代码和细节处理。</p>
+<h3 id="二者区别"><a href="#二者区别" class="headerlink" title="二者区别"></a>二者区别</h3><p>以上的代码使用了 <code>CC_MD5_CTX</code> 结构体和相关的函数来手动管理 MD5 算法的上下文，并计算字符串的 MD5 哈希值。而直接使用 <code>CC_MD5</code> 函数则是一个更简化的方法，它隐藏了 MD5 算法的具体实现细节，只需要调用一个函数即可完成 MD5 加密的操作。</p>
+<p>下面是两种方式的主要区别：</p>
+<ol>
+<li><strong>复杂度和灵活性</strong>： <ul>
+<li>使用 <code>CC_MD5_CTX</code> 结构体手动管理 MD5 算法的上下文需要更多的代码和细节处理，但也提供了更多的灵活性，可以在需要时手动控制加密过程。</li>
+<li>直接使用 <code>CC_MD5</code> 函数更简单，它隐藏了 MD5 算法的实现细节，只需要调用一个函数即可完成加密，但相对缺乏灵活性。</li>
+</ul>
+</li>
+<li><strong>使用方式</strong>： <ul>
+<li>使用 <code>CC_MD5_CTX</code> 需要手动创建一个 <code>CC_MD5_CTX</code> 结构体实例，并使用 <code>CC_MD5_Init</code>、<code>CC_MD5_Update</code> 和 <code>CC_MD5_Final</code> 函数来管理和执行 MD5 加密过程。</li>
+<li>直接使用 <code>CC_MD5</code> 函数则只需要调用该函数，并传入要计算哈希值的数据即可，函数内部会自动完成 MD5 加密的过程。</li>
+</ul>
+</li>
+</ol>
+<p>综上所述，如果你需要更底层的控制或更多的灵活性，可以使用 <code>CC_MD5_CTX</code> 结构体进行 MD5 加密；如果你只需要简单地计算字符串的 MD5 哈希值，那么直接调用 <code>CC_MD5</code> 函数会更加方便。</p>
+<h2 id="SHA"><a href="#SHA" class="headerlink" title="SHA"></a>SHA</h2><h3 id="CC-SHA1"><a href="#CC-SHA1" class="headerlink" title="CC_SHA1"></a>CC_SHA1</h3><p><code>CC_SHA1</code> 是 CommonCrypto 框架中提供的用于计算数据的 SHA-1 哈希值的函数。SHA-1（Secure Hash Algorithm 1）是一种常用的哈希函数，用于产生数据的哈希值，通常用于数据完整性验证和安全相关的场景。</p>
+<p>以下是一个示例代码，演示了如何使用 <code>CC_SHA1</code> 函数计算字符串的 SHA-1 哈希值：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonDigest.h&gt;</span></span><br><br><span class="hljs-comment">// 函数声明：计算字符串的 SHA-1 哈希值</span><br><span class="hljs-built_in">NSString</span>* sha1(<span class="hljs-built_in">NSString</span> *inputString) &#123;<br>    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *cStr = [inputString UTF8String];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> digest[CC_SHA1_DIGEST_LENGTH];<br>    <br>    <span class="hljs-comment">// 计算 SHA-1 哈希值</span><br>    CC_SHA1(cStr, (CC_LONG)strlen(cStr), digest);<br>    <br>    <span class="hljs-comment">// 将哈希值转换为十六进制字符串</span><br>    <span class="hljs-built_in">NSMutableString</span> *outputString = [<span class="hljs-built_in">NSMutableString</span> stringWithCapacity:CC_SHA1_DIGEST_LENGTH * <span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; CC_SHA1_DIGEST_LENGTH; i++) &#123;<br>        [outputString appendFormat:<span class="hljs-string">@&quot;%02x&quot;</span>, digest[i]];<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> [outputString <span class="hljs-keyword">copy</span>];<br>&#125;<br><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入字符串</span><br>        <span class="hljs-built_in">NSString</span> *inputString = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <br>        <span class="hljs-comment">// 计算字符串的 SHA-1 哈希值</span><br>        <span class="hljs-built_in">NSString</span> *sha1String = sha1(inputString);<br>        <br>        <span class="hljs-comment">// 输出 SHA-1 哈希值</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;SHA-1: %@&quot;</span>, sha1String);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这段代码定义了一个函数 <code>sha1</code>，接受一个输入字符串，并返回其 SHA-1 哈希值的字符串表示。在 <code>main</code> 函数中，我们调用了这个函数，传入一个字符串作为输入，然后打印出计算得到的 SHA-1 哈希值。</p>
+<p>需要注意的是，<code>CC_SHA1</code> 函数会计算输入数据的 SHA-1 哈希值，并将结果存储在 <code>digest</code> 数组中。然后，我们将 <code>digest</code> 数组中的字节数据转换为十六进制字符串，以得到最终的 SHA-1 哈希值。</p>
+<h3 id="CC-SHA1-CTX"><a href="#CC-SHA1-CTX" class="headerlink" title="CC_SHA1_CTX"></a>CC_SHA1_CTX</h3><p>要更底层地使用 <code>CC_SHA1</code> 函数，你可以手动管理 SHA-1 算法的上下文，并使用相关的函数来更新上下文和获取最终的哈希值。以下是一个示例代码，演示了如何使用 <code>CC_SHA1</code> 函数进行 SHA-1 加密：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonDigest.h&gt;</span></span><br><br><span class="hljs-comment">// 函数声明：计算字符串的 SHA-1 哈希值</span><br><span class="hljs-built_in">NSString</span>* sha1WithCTX(<span class="hljs-built_in">NSString</span> *inputString) &#123;<br>    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *cStr = [inputString UTF8String];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> digest[CC_SHA1_DIGEST_LENGTH];<br>    <br>    <span class="hljs-comment">// 初始化 SHA-1 上下文</span><br>    CC_SHA1_CTX ctx;<br>    CC_SHA1_Init(&amp;ctx);<br>    <br>    <span class="hljs-comment">// 更新 SHA-1 上下文</span><br>    CC_SHA1_Update(&amp;ctx, cStr, (CC_LONG)strlen(cStr));<br>    <br>    <span class="hljs-comment">// 获取 SHA-1 哈希值</span><br>    CC_SHA1_Final(digest, &amp;ctx);<br>    <br>    <span class="hljs-comment">// 将哈希值转换为十六进制字符串</span><br>    <span class="hljs-built_in">NSMutableString</span> *outputString = [<span class="hljs-built_in">NSMutableString</span> stringWithCapacity:CC_SHA1_DIGEST_LENGTH * <span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; CC_SHA1_DIGEST_LENGTH; i++) &#123;<br>        [outputString appendFormat:<span class="hljs-string">@&quot;%02x&quot;</span>, digest[i]];<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> [outputString <span class="hljs-keyword">copy</span>];<br>&#125;<br><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入字符串</span><br>        <span class="hljs-built_in">NSString</span> *inputString = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <br>        <span class="hljs-comment">// 计算字符串的 SHA-1 哈希值</span><br>        <span class="hljs-built_in">NSString</span> *sha1String = sha1WithCTX(inputString);<br>        <br>        <span class="hljs-comment">// 输出 SHA-1 哈希值</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;SHA-1: %@&quot;</span>, sha1String);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们手动创建了一个 <code>CC_SHA1_CTX</code> 结构体实例 <code>ctx</code>，并使用 <code>CC_SHA1_Init</code> 函数初始化了 SHA-1 上下文。然后，我们使用 <code>CC_SHA1_Update</code> 函数更新了上下文，传入要计算哈希值的数据。最后，使用 <code>CC_SHA1_Final</code> 函数获取最终的 SHA-1 哈希值。</p>
+<p>需要注意的是，在使用 <code>CC_SHA1_CTX</code> 进行 SHA-1 加密时，你需要手动管理 SHA-1 算法的上下文，包括初始化、更新和获取最终的哈希值。这种方式相对于直接调用 <code>CC_SHA1</code> 函数更加底层和灵活，但也需要更多的代码和细节处理。</p>
+<h2 id="Hmac"><a href="#Hmac" class="headerlink" title="Hmac"></a>Hmac</h2><h3 id="CC-Hmac"><a href="#CC-Hmac" class="headerlink" title="CC_Hmac"></a>CC_Hmac</h3><p><code>CC_Hmac</code> 是 CommonCrypto 框架中提供的用于计算 HMAC（Keyed-Hashing for Message Authentication）的函数。HMAC 是一种用于消息认证的哈希算法，它结合了密钥和消息进行哈希运算，以确保消息的完整性和真实性。</p>
+<p>以下是 <code>CC_Hmac</code> 函数的签名：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *<span class="hljs-title function_">CC_Hmac</span><span class="hljs-params">(</span><br><span class="hljs-params">    CCHmacAlgorithm algorithm,</span><br><span class="hljs-params">    <span class="hljs-type">const</span> <span class="hljs-type">void</span> *key,</span><br><span class="hljs-params">    <span class="hljs-type">size_t</span> keyLength,</span><br><span class="hljs-params">    <span class="hljs-type">const</span> <span class="hljs-type">void</span> *data,</span><br><span class="hljs-params">    <span class="hljs-type">size_t</span> dataLength,</span><br><span class="hljs-params">    <span class="hljs-type">void</span> *macOut)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<ul>
+<li><code>algorithm</code>：指定 HMAC 使用的哈希算法，可以是 <code>kCCHmacAlgSHA1</code>、<code>kCCHmacAlgSHA256</code> 等。</li>
+<li><code>key</code>：指向用于 HMAC 的密钥数据的指针。</li>
+<li><code>keyLength</code>：密钥数据的长度。</li>
+<li><code>data</code>：指向要进行 HMAC 运算的消息数据的指针。</li>
+<li><code>dataLength</code>：消息数据的长度。</li>
+<li><code>macOut</code>：用于存储 HMAC 结果的缓冲区。</li>
+</ul>
+<p>以下是一个示例代码，演示了如何使用 <code>CC_Hmac</code> 函数计算消息的 HMAC 值：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonHMAC.h&gt;</span></span><br><br><span class="hljs-comment">// 函数声明：计算消息的 HMAC 值</span><br><span class="hljs-built_in">NSData</span>* hmac(CCHmacAlgorithm algorithm, <span class="hljs-built_in">NSString</span> *keyString, <span class="hljs-built_in">NSString</span> *messageString) &#123;<br>    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *key = [keyString cStringUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *message = [messageString cStringUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> digest[CC_SHA256_DIGEST_LENGTH];<br>    <br>    CCHmac(algorithm, key, strlen(key), message, strlen(message), digest);<br>    <br>    <span class="hljs-keyword">return</span> [<span class="hljs-built_in">NSData</span> dataWithBytes:digest length:<span class="hljs-keyword">sizeof</span>(digest)];<br>&#125;<br><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入密钥和消息</span><br>        <span class="hljs-built_in">NSString</span> *key = <span class="hljs-string">@&quot;secretKey&quot;</span>;<br>        <span class="hljs-built_in">NSString</span> *message = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <br>        <span class="hljs-comment">// 计算消息的 HMAC-SHA256 值</span><br>        <span class="hljs-built_in">NSData</span> *hmacValue = hmac(kCCHmacAlgSHA256, key, message);<br>        <br>        <span class="hljs-comment">// 输出 HMAC 值</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;HMAC-SHA256: %@&quot;</span>, hmacValue);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们定义了一个 <code>hmac</code> 函数，接受 HMAC 使用的哈希算法、密钥和消息，并返回计算得到的 HMAC 值。然后在 <code>main</code> 函数中调用该函数，计算消息的 HMAC-SHA256 值，并输出结果。</p>
+<h3 id="CC-Hmac-CTX"><a href="#CC-Hmac-CTX" class="headerlink" title="CC_Hmac_CTX"></a>CC_Hmac_CTX</h3><p>以下是一个使用 <code>CC_Hmac_CTX</code> 结构体手动计算 HMAC 的示例代码：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonHMAC.h&gt;</span></span><br><br><span class="hljs-comment">// 计算 HMAC 哈希值的函数</span><br><span class="hljs-built_in">NSString</span>* hmacWithCTX(<span class="hljs-built_in">NSString</span> *inputString, <span class="hljs-built_in">NSString</span> *keyString) &#123;<br>    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *cKey  = [keyString cStringUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> *cData = [inputString cStringUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <br>    <span class="hljs-comment">// 初始化 HMAC 上下文</span><br>    CC_Hmac_CTX ctx;<br>    CCHmacInit(&amp;ctx, kCCHmacAlgSHA1, cKey, strlen(cKey));<br>    <br>    <span class="hljs-comment">// 更新 HMAC 上下文</span><br>    CCHmacUpdate(&amp;ctx, cData, strlen(cData));<br>    <br>    <span class="hljs-comment">// 计算最终的 HMAC 哈希值</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> cHMAC[CC_SHA1_DIGEST_LENGTH];<br>    CCHmacFinal(&amp;ctx, cHMAC);<br>    <br>    <span class="hljs-comment">// 将哈希值转换为十六进制字符串</span><br>    <span class="hljs-built_in">NSMutableString</span> *outputString = [<span class="hljs-built_in">NSMutableString</span> stringWithCapacity:CC_SHA1_DIGEST_LENGTH * <span class="hljs-number">2</span>];<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; CC_SHA1_DIGEST_LENGTH; i++) &#123;<br>        [outputString appendFormat:<span class="hljs-string">@&quot;%02x&quot;</span>, cHMAC[i]];<br>    &#125;<br>    <br>    <span class="hljs-keyword">return</span> [outputString <span class="hljs-keyword">copy</span>];<br>&#125;<br><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入字符串和密钥</span><br>        <span class="hljs-built_in">NSString</span> *inputString = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <span class="hljs-built_in">NSString</span> *keyString = <span class="hljs-string">@&quot;SecretKey&quot;</span>;<br>        <br>        <span class="hljs-comment">// 计算字符串的 HMAC 哈希值</span><br>        <span class="hljs-built_in">NSString</span> *hmacString = hmacWithCTX(inputString, keyString);<br>        <br>        <span class="hljs-comment">// 输出 HMAC 哈希值</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;HMAC: %@&quot;</span>, hmacString);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们手动创建了一个 <code>CC_Hmac_CTX</code> 结构体实例 <code>ctx</code>，并使用 <code>CCHmacInit</code> 函数初始化了 HMAC 上下文。然后，我们使用 <code>CCHmacUpdate</code> 函数更新了上下文，传入要计算哈希值的数据。最后，使用 <code>CCHmacFinal</code> 函数获取最终的 HMAC 哈希值。</p>
+<p>需要注意的是，在使用 <code>CC_Hmac_CTX</code> 进行 HMAC 计算时，你需要手动管理 HMAC 算法的上下文，包括初始化、更新和获取最终的哈希值。这种方式相对于直接调用 <code>CCHmac</code> 函数更加底层和灵活，但也需要更多的代码和细节处理。</p>
+<h1 id="对称加密算法"><a href="#对称加密算法" class="headerlink" title="对称加密算法"></a>对称加密算法</h1><p><img src="https://cdn.nlark.com/yuque/0/2024/png/32697134/1711620878969-12cb704a-6832-4e34-9a66-6c7bfea249d6.png#averageHue=%23f1f1f1&clientId=u4539c149-39ec-4&from=paste&height=436&id=u3201dffb&originHeight=654&originWidth=1417&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=444594&status=done&style=none&taskId=u8ae99b56-11fa-4987-892d-b22558cb4c9&title=&width=944.6666666666666" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="DES加密"><a href="#DES加密" class="headerlink" title="DES加密"></a>DES加密</h2><h3 id="加密模式"><a href="#加密模式" class="headerlink" title="加密模式"></a>加密模式</h3><p>DES（Data Encryption Standard）加密算法支持多种模式，常见的模式包括：</p>
+<ol>
+<li><strong>ECB 模式（Electronic Codebook）</strong>：<br>ECB 模式是最简单的 DES 加密模式，它将输入数据分成固定大小的数据块，并对每个数据块进行独立的加密操作。这意味着如果两个相同的数据块使用相同的密钥进行加密，它们的加密结果也会完全相同。ECB 模式容易受到重放攻击的影响，并且不适合加密大量重复的数据。 </li>
+<li><strong>CBC 模式（Cipher Block Chaining）</strong>：<br>CBC 模式是一种常用的 DES 加密模式，它引入了初始化向量（Initialization Vector，IV），并且在每个数据块的加密过程中使用前一个数据块的加密结果作为初始向量。这种方式可以使得相同的输入数据块使用相同的密钥在不同位置加密时得到不同的输出，增加了安全性。CBC 模式需要注意的是，初始向量必须是随机且唯一的，而且需要与解密过程中使用的初始向量相同。 </li>
+<li><strong>CFB 模式（Cipher Feedback）</strong>：<br>CFB 模式是一种流密码模式，它允许将 DES 加密算法转换为流密码。在 CFB 模式中，密文流作为 DES 加密算法的输入，并且通过 XOR 操作与输入数据流进行混合。CFB 模式可以实现实时加密，但由于流密码的特性，它不具备完整的数据完整性保护。 </li>
+<li><strong>OFB 模式（Output Feedback）</strong>：<br>OFB 模式也是一种流密码模式，类似于 CFB 模式。在 OFB 模式中，密钥流作为 DES 加密算法的输入，并且通过 XOR 操作与输入数据流进行混合。与 CFB 模式不同的是，OFB 模式不会因为一个密文块的损坏而导致后续数据的损坏。然而，OFB 模式也不具备完整的数据完整性保护。 </li>
+<li><strong>CTR 模式（Counter）</strong>：<br>CTR 模式是一种计数器模式，它将初始向量与计数器值组合起来形成一个加密密钥流，然后通过 XOR 操作与输入数据流进行混合。CTR 模式可以实现并行加密和解密，并且不需要像 CBC 模式那样等待前一个数据块的加密完成。CTR 模式也不会因为一个密文块的损坏而导致后续数据的损坏，但它需要确保计数器值是唯一的。</li>
+</ol>
+<h3 id="ECB"><a href="#ECB" class="headerlink" title="ECB"></a>ECB</h3><p>当我们需要在 Objective-C 中使用 DES 加密时，我们可以通过 CommonCrypto 框架中的 CCCrypt 函数来实现。下面是对示例代码的详细解释：</p>
+<ol>
+<li>导入必要的头文件：</li>
+</ol>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonCrypto.h&gt;</span></span><br></code></pre></td></tr></table></figure>
+
+
+<ol start="2">
+<li>编写 DES 加密函数：</li>
+</ol>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-built_in">NSData</span>* encryptDES(<span class="hljs-built_in">NSString</span> *plainText, <span class="hljs-built_in">NSString</span> *key) &#123;<br>    <span class="hljs-comment">// 将明文字符串和密钥转换为 NSData 对象</span><br>    <span class="hljs-built_in">NSData</span> *plainData = [plainText dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <span class="hljs-built_in">NSData</span> *keyData = [key dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <br>    <span class="hljs-comment">// 计算加密后的数据大小</span><br>    size_t bufferSize = [plainData length] + kCCBlockSizeDES;<br>    <span class="hljs-type">void</span> *buffer = malloc(bufferSize);<br>    <br>    <span class="hljs-comment">// 执行 DES 加密</span><br>    size_t encryptedSize = <span class="hljs-number">0</span>;<br>    CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt,              <span class="hljs-comment">// 加密操作</span><br>                                          kCCAlgorithmDES,         <span class="hljs-comment">// 加密算法</span><br>                                          kCCOptionPKCS7Padding | kCCOptionECBMode, <span class="hljs-comment">// 填充模式和加密模式</span><br>                                          [keyData bytes],         <span class="hljs-comment">// 密钥</span><br>                                          kCCKeySizeDES,           <span class="hljs-comment">// 密钥大小</span><br>                                          <span class="hljs-literal">NULL</span>,                    <span class="hljs-comment">// 初始化向量（ECB 模式不需要）</span><br>                                          [plainData bytes],       <span class="hljs-comment">// 输入数据</span><br>                                          [plainData length],      <span class="hljs-comment">// 输入数据长度</span><br>                                          buffer,                  <span class="hljs-comment">// 输出缓冲区</span><br>                                          bufferSize,              <span class="hljs-comment">// 输出缓冲区大小</span><br>                                          &amp;encryptedSize);         <span class="hljs-comment">// 实际加密数据长度</span><br>    <br>    <span class="hljs-keyword">if</span> (cryptStatus == kCCSuccess) &#123;<br>        <span class="hljs-comment">// 将加密后的数据转换为 NSData 对象并返回</span><br>        <span class="hljs-keyword">return</span> [<span class="hljs-built_in">NSData</span> dataWithBytesNoCopy:buffer length:encryptedSize];<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-comment">// 加密失败，释放缓冲区并返回 nil</span><br>        free(buffer);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个函数中，我们首先将输入的明文字符串和密钥转换为 NSData 对象，因为 CCCrypt 函数需要接受的参数类型是字节数组。然后，我们计算了加密后数据的大小，并为加密操作分配了足够的缓冲区。接下来，我们使用 CCCrypt 函数执行 DES 加密，其中包括加密操作、加密算法、填充模式、密钥、输入数据等参数。最后，如果加密成功，我们将加密后的数据封装成 NSData 对象返回；如果加密失败，我们释放分配的缓冲区并返回 nil。 </p>
+<ol start="3">
+<li>主函数中调用 DES 加密函数并输出结果：</li>
+</ol>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入待加密的明文字符串和密钥</span><br>        <span class="hljs-built_in">NSString</span> *plainText = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <span class="hljs-built_in">NSString</span> *key = <span class="hljs-string">@&quot;12345678&quot;</span>;<br>        <br>        <span class="hljs-comment">// 调用 DES 加密函数进行加密</span><br>        <span class="hljs-built_in">NSData</span> *encryptedData = encryptDES(plainText, key);<br>        <span class="hljs-keyword">if</span> (encryptedData) &#123;<br>            <span class="hljs-comment">// 将加密后的数据转换为 Base64 编码的字符串并输出</span><br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Encrypted data: %@&quot;</span>, [encryptedData base64EncodedStringWithOptions:<span class="hljs-number">0</span>]);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Encryption failed.&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在主函数中，我们首先定义了待加密的明文字符串和密钥。然后，我们调用了 DES 加密函数进行加密操作，并将加密后的数据转换为 Base64 编码的字符串，最后输出到控制台。 </p>
+<h3 id="CBC"><a href="#CBC" class="headerlink" title="CBC"></a>CBC</h3><p>以下是使用 CBC 模式进行 DES 加密的 Objective-C 代码示例：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonCrypto.h&gt;</span></span><br><br><span class="hljs-comment">// DES CBC 加密函数</span><br><span class="hljs-built_in">NSData</span>* encryptDESCBC(<span class="hljs-built_in">NSString</span> *plainText, <span class="hljs-built_in">NSString</span> *key, <span class="hljs-built_in">NSString</span> *iv) &#123;<br>    <span class="hljs-built_in">NSData</span> *plainData = [plainText dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <span class="hljs-built_in">NSData</span> *keyData = [key dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <span class="hljs-built_in">NSData</span> *ivData = [iv dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <br>    size_t bufferSize = [plainData length] + kCCBlockSizeDES;<br>    <span class="hljs-type">void</span> *buffer = malloc(bufferSize);<br>    <br>    size_t encryptedSize = <span class="hljs-number">0</span>;<br>    CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt,<br>                                          kCCAlgorithmDES,<br>                                          kCCOptionPKCS7Padding | kCCOptionECBMode,<br>                                          [keyData bytes],<br>                                          kCCKeySizeDES,<br>                                          [ivData bytes],<br>                                          [plainData bytes],<br>                                          [plainData length],<br>                                          buffer,<br>                                          bufferSize,<br>                                          &amp;encryptedSize);<br>    <br>    <span class="hljs-keyword">if</span> (cryptStatus == kCCSuccess) &#123;<br>        <span class="hljs-keyword">return</span> [<span class="hljs-built_in">NSData</span> dataWithBytesNoCopy:buffer length:encryptedSize];<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        free(buffer);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入待加密的明文字符串、密钥和初始向量</span><br>        <span class="hljs-built_in">NSString</span> *plainText = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <span class="hljs-built_in">NSString</span> *key = <span class="hljs-string">@&quot;12345678&quot;</span>;<br>        <span class="hljs-built_in">NSString</span> *iv = <span class="hljs-string">@&quot;87654321&quot;</span>; <span class="hljs-comment">// 初始向量必须是 8 字节</span><br>        <br>        <span class="hljs-comment">// 调用 DES CBC 加密函数进行加密</span><br>        <span class="hljs-built_in">NSData</span> *encryptedData = encryptDESCBC(plainText, key, iv);<br>        <span class="hljs-keyword">if</span> (encryptedData) &#123;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Encrypted data: %@&quot;</span>, [encryptedData base64EncodedStringWithOptions:<span class="hljs-number">0</span>]);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Encryption failed.&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们定义了一个名为 <code>encryptDESCBC</code> 的函数，用于对输入的明文字符串进行 DES CBC 加密。函数接受三个参数：待加密的明文字符串、密钥和初始向量。在函数内部，我们将输入的明文字符串、密钥和初始向量转换为 NSData 对象，然后使用 CCCrypt 函数执行 DES CBC 加密操作。与前面的 ECB 模式不同，我们将 <code>kCCOptionECBMode</code> 替换为 <code>kCCOptionPKCS7Padding | kCCOptionECBMode</code>，并将初始向量传递给 CCCrypt 函数。最后，我们将加密后的数据转换为 NSData 对象并返回。</p>
+<p>在主函数中，我们定义了待加密的明文字符串、密钥和初始向量，并调用了 DES CBC 加密函数进行加密。加密成功后，我们将加密后的数据转换为 Base64 编码的字符串并输出到控制台。</p>
+<p>:::info<br>在上面的 DES CBC 加密代码中，有一些参数需要详细解释和注意事项：</p>
+<ol>
+<li><code>plainText</code>： <ul>
+<li>参数类型：NSString 类型，表示待加密的明文字符串。</li>
+<li>解释：这是需要进行加密的原始数据，可以是任意的文本字符串。</li>
+<li>注意事项：在实际应用中，需要确保明文字符串的长度不超过 DES 加密算法的分组大小，通常是 64 位（8 字节）。如果需要加密的数据长度超过了分组大小，需要进行数据分块处理或者使用填充算法（如 PKCS7 填充）进行填充。</li>
+</ul>
+</li>
+<li><code>key</code>： <ul>
+<li>参数类型：NSString 类型，表示加密所使用的密钥。</li>
+<li>解释：这是用于加密和解密数据的密钥，必须是长度为 8 字节的字符串。DES 算法的密钥长度固定为 64 位，但实际上只有 56 位被用于加密。</li>
+<li>注意事项：在实际应用中，密钥的生成和管理至关重要。密钥应该是随机生成的、足够复杂的字节序列，并且应该存储在安全的位置，避免泄露。</li>
+</ul>
+</li>
+<li><code>iv</code>： <ul>
+<li>参数类型：NSString 类型，表示初始向量（Initialization Vector）。</li>
+<li>解释：初始向量是一段固定长度的随机数据，用于增强密码的安全性。在 CBC 模式下，需要提供一个长度与分组大小相同的初始向量。</li>
+<li>注意事项：初始向量必须是随机生成的、唯一的，且与解密过程中使用的初始向量相同。它不需要保密，但必须确保不被篡改。</li>
+</ul>
+</li>
+<li>注意事项： <ul>
+<li>在实际应用中，为了安全起见，密钥和初始向量应该是经过适当的密钥派生函数生成的安全密钥，而不是简单的字符串。</li>
+<li>对于初始向量，必须确保它是随机生成的且与解密过程中使用的初始向量相同。否则，加密后的数据可能会受到攻击，导致数据泄露或篡改。<br>:::</li>
+</ul>
+</li>
+</ol>
+<h2 id="AES加密"><a href="#AES加密" class="headerlink" title="AES加密"></a>AES加密</h2><h3 id="CCCrypt实现"><a href="#CCCrypt实现" class="headerlink" title="CCCrypt实现"></a>CCCrypt实现</h3><p>以下是使用 CommonCrypto 框架中的 CCCrypt 函数实现 AES 加密的 Objective-C 代码示例：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonCrypto.h&gt;</span></span><br><br><span class="hljs-comment">// AES 加密函数</span><br><span class="hljs-built_in">NSData</span>* encryptAES(<span class="hljs-built_in">NSString</span> *plainText, <span class="hljs-built_in">NSString</span> *key, <span class="hljs-built_in">NSData</span> *iv) &#123;<br>    <span class="hljs-built_in">NSData</span> *plainData = [plainText dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <span class="hljs-built_in">NSData</span> *keyData = [key dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>    <br>    size_t bufferSize = [plainData length] + kCCBlockSizeAES128;<br>    <span class="hljs-type">void</span> *buffer = malloc(bufferSize);<br>    <br>    size_t encryptedSize = <span class="hljs-number">0</span>;<br>    CCCryptorStatus cryptStatus = CCCrypt(kCCEncrypt,<br>                                          kCCAlgorithmAES,<br>                                          kCCOptionPKCS7Padding | kCCOptionECBMode, <span class="hljs-comment">// 填充模式和加密模式</span><br>                                          [keyData bytes],<br>                                          kCCKeySizeAES128,<br>                                          [iv bytes], <span class="hljs-comment">// 初始向量（可选，ECB 模式不需要）</span><br>                                          [plainData bytes],<br>                                          [plainData length],<br>                                          buffer,<br>                                          bufferSize,<br>                                          &amp;encryptedSize);<br>    <br>    <span class="hljs-keyword">if</span> (cryptStatus == kCCSuccess) &#123;<br>        <span class="hljs-keyword">return</span> [<span class="hljs-built_in">NSData</span> dataWithBytesNoCopy:buffer length:encryptedSize];<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        free(buffer);<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>;<br>    &#125;<br>&#125;<br><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入待加密的明文字符串和密钥</span><br>        <span class="hljs-built_in">NSString</span> *plainText = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <span class="hljs-built_in">NSString</span> *key = <span class="hljs-string">@&quot;1234567890123456&quot;</span>; <span class="hljs-comment">// AES128 的密钥长度为 16 字节</span><br>        <br>        <span class="hljs-comment">// 调用 AES 加密函数进行加密</span><br>        <span class="hljs-built_in">NSData</span> *encryptedData = encryptAES(plainText, key, <span class="hljs-literal">nil</span>);<br>        <span class="hljs-keyword">if</span> (encryptedData) &#123;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Encrypted data: %@&quot;</span>, [encryptedData base64EncodedStringWithOptions:<span class="hljs-number">0</span>]);<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Encryption failed.&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们定义了一个名为 <code>encryptAES</code> 的函数，用于对输入的明文字符串进行 AES 加密。函数接受三个参数：待加密的明文字符串、密钥和初始向量（可选）。在函数内部，我们将输入的明文字符串和密钥转换为 NSData 对象，并使用 CCCrypt 函数执行 AES 加密操作。与 DES 加密类似，我们需要指定加密算法（<code>kCCAlgorithmAES</code>）、填充模式（<code>kCCOptionPKCS7Padding</code>）和加密模式（<code>kCCOptionECBMode</code>）。如果需要使用初始向量，则需要将其作为参数传递给 CCCrypt 函数。最后，我们将加密后的数据转换为 NSData 对象并返回。<br>在主函数中，我们定义了待加密的明文字符串和密钥，并调用了 AES 加密函数进行加密。加密成功后，我们将加密后的数据转换为 Base64 编码的字符串并输出到控制台。<br>需要注意的是，在实际应用中，密钥的长度应该符合加密算法的要求。例如，AES128 的密钥长度为 16 字节，AES256 的密钥长度为 32 字节。另外，初始向量是可选的，具体是否需要使用取决于加密模式和具体的安全需求。</p>
+<h3 id="CCCryptCreate实现"><a href="#CCCryptCreate实现" class="headerlink" title="CCCryptCreate实现"></a>CCCryptCreate实现</h3><p><code>CCCryptCreate</code> 函数通常用于创建一个加密或解密操作的上下文对象，而不是直接执行加密或解密操作。它的作用是初始化一个加密或解密的上下文，配置加密算法、密钥、填充模式等参数，并返回一个指向该上下文的句柄。</p>
+<p>下面是一个使用 <code>CCCryptCreate</code> 函数创建 AES 加密操作上下文的示例代码：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs objectivec"><span class="hljs-meta">#import <span class="hljs-string">&lt;Foundation/Foundation.h&gt;</span></span><br><span class="hljs-meta">#import <span class="hljs-string">&lt;CommonCrypto/CommonCrypto.h&gt;</span></span><br><br><span class="hljs-comment">// 函数声明</span><br>CCCryptorStatus createAESCryptor(CCCryptorRef *cryptor, <span class="hljs-built_in">NSData</span> *key, <span class="hljs-built_in">NSData</span> *iv, CCOperation operation);<br><br><span class="hljs-comment">// 创建 AES 加密操作上下文</span><br>CCCryptorStatus createAESCryptor(CCCryptorRef *cryptor, <span class="hljs-built_in">NSData</span> *key, <span class="hljs-built_in">NSData</span> *iv, CCOperation operation) &#123;<br>    <span class="hljs-keyword">return</span> CCCryptorCreate(operation,            <span class="hljs-comment">// 加密或解密操作</span><br>                           kCCAlgorithmAES,      <span class="hljs-comment">// 加密算法</span><br>                           kCCOptionPKCS7Padding | kCCOptionECBMode, <span class="hljs-comment">// 填充模式和加密模式</span><br>                           [key bytes],          <span class="hljs-comment">// 密钥</span><br>                           [key length],         <span class="hljs-comment">// 密钥长度</span><br>                           [iv bytes],           <span class="hljs-comment">// 初始向量（可选，ECB 模式不需要）</span><br>                           cryptor);            <span class="hljs-comment">// 输出：加密或解密操作上下文</span><br>&#125;<br><br><span class="hljs-type">int</span> main(<span class="hljs-type">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-type">char</span> * argv[]) &#123;<br>    <span class="hljs-keyword">@autoreleasepool</span> &#123;<br>        <span class="hljs-comment">// 输入待加密的明文字符串和密钥</span><br>        <span class="hljs-built_in">NSString</span> *plainText = <span class="hljs-string">@&quot;Hello, World!&quot;</span>;<br>        <span class="hljs-built_in">NSString</span> *key = <span class="hljs-string">@&quot;1234567890123456&quot;</span>; <span class="hljs-comment">// AES128 的密钥长度为 16 字节</span><br>        <span class="hljs-built_in">NSData</span> *keyData = [key dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>        <br>        <span class="hljs-comment">// 创建 AES 加密操作上下文</span><br>        CCCryptorRef cryptor = <span class="hljs-literal">NULL</span>;<br>        CCCryptorStatus status = createAESCryptor(&amp;cryptor, keyData, <span class="hljs-literal">nil</span>, kCCEncrypt);<br>        <span class="hljs-keyword">if</span> (status != kCCSuccess) &#123;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Failed to create AES cryptor.&quot;</span>);<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 加密数据</span><br>        <span class="hljs-built_in">NSData</span> *plainData = [plainText dataUsingEncoding:<span class="hljs-built_in">NSUTF8StringEncoding</span>];<br>        size_t bufferSize = [plainData length] + kCCBlockSizeAES128;<br>        <span class="hljs-type">void</span> *buffer = malloc(bufferSize);<br>        size_t encryptedSize = <span class="hljs-number">0</span>;<br>        status = CCCryptorUpdate(cryptor,<br>                                 [plainData bytes],<br>                                 [plainData length],<br>                                 buffer,<br>                                 bufferSize,<br>                                 &amp;encryptedSize);<br>        <span class="hljs-keyword">if</span> (status != kCCSuccess) &#123;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;AES encryption failed.&quot;</span>);<br>            free(buffer);<br>            CCCryptorRelease(cryptor);<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 结束加密操作</span><br>        status = CCCryptorFinal(cryptor,<br>                                buffer + encryptedSize,<br>                                bufferSize - encryptedSize,<br>                                &amp;encryptedSize);<br>        <span class="hljs-keyword">if</span> (status != kCCSuccess) &#123;<br>            <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;AES encryption failed.&quot;</span>);<br>            free(buffer);<br>            CCCryptorRelease(cryptor);<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 将加密后的数据转换为 NSData 对象</span><br>        <span class="hljs-built_in">NSData</span> *encryptedData = [<span class="hljs-built_in">NSData</span> dataWithBytesNoCopy:buffer length:encryptedSize + kCCBlockSizeAES128];<br>        <br>        <span class="hljs-comment">// 输出加密后的数据</span><br>        <span class="hljs-built_in">NSLog</span>(<span class="hljs-string">@&quot;Encrypted data: %@&quot;</span>, [encryptedData base64EncodedStringWithOptions:<span class="hljs-number">0</span>]);<br>        <br>        <span class="hljs-comment">// 释放加密操作上下文和缓冲区</span><br>        free(buffer);<br>        CCCryptorRelease(cryptor);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在这个示例中，我们首先定义了一个函数 <code>createAESCryptor</code>，用于创建 AES 加密操作上下文。然后在 <code>main</code> 函数中，我们调用该函数创建了一个 AES 加密操作上下文，并进行了加密操作。最后，我们释放了加密操作上下文和缓冲区。</p>
+<p>需要注意的是，这段代码演示了如何使用 <code>CCCryptCreate</code> 和 <code>CCCryptUpdate</code> 函数手动执行 AES 加密操作，这需要手动管理加密操作上下文和内存，相对较复杂。在实际应用中，我们更倾向于使用高级的封装，例如 <code>CCCrypt</code> 函数，以简化加密操作的实现。</p>
+<h2 id="二者区别-1"><a href="#二者区别-1" class="headerlink" title="二者区别"></a>二者区别</h2><p>AES（Advanced Encryption Standard）和 DES（Data Encryption Standard）是两种不同的对称加密算法，它们之间有几个主要区别：</p>
+<ol>
+<li><strong>密钥长度</strong>： <ul>
+<li>AES：支持多种密钥长度，包括 128 位、192 位和 256 位。通常使用的是 AES128、AES192 和 AES256。</li>
+<li>DES：固定密钥长度为 56 位，虽然可以使用 64 位密钥，但只有 56 位用于实际的加密操作，另外 8 位用于奇偶校验。</li>
+</ul>
+</li>
+<li><strong>安全性</strong>： <ul>
+<li>AES：AES 是目前最常用和最安全的对称加密算法之一。它的安全性基于其密钥长度和算法的复杂性，适用于大多数安全需求。</li>
+<li>DES：由于其较短的密钥长度和算法结构的限制，DES 已经被认为是不安全的，不推荐用于新的应用程序和系统。</li>
+</ul>
+</li>
+<li><strong>加密速度</strong>： <ul>
+<li>AES：AES 加密速度比 DES 更快，特别是在硬件加速支持的环境下，例如现代的 CPU 指令集和专用加密硬件。</li>
+<li>DES：DES 的加密速度相对较慢，特别是在处理大量数据时，由于其简单的算法结构和较短的密钥长度。</li>
+</ul>
+</li>
+<li><strong>适用性</strong>： <ul>
+<li>AES：由于其高安全性和较快的加密速度，AES 在很多应用场景下被广泛使用，包括数据传输、文件加密、网络通信等。</li>
+<li>DES：由于安全性较低，DES 已经逐渐被淘汰，不再推荐在新的系统和应用中使用。然而，由于历史原因，一些旧系统仍然可能在使用 DES。</li>
+</ul>
+</li>
+</ol>
+<p>综上所述，AES 比 DES 更安全、更快速，而且更适合现代应用需求。因此，如果需要选择一种对称加密算法，推荐使用 AES。</p>
+<h1 id="非对称加密算法"><a href="#非对称加密算法" class="headerlink" title="非对称加密算法"></a>非对称加密算法</h1><p><img src="https://cdn.nlark.com/yuque/0/2024/png/32697134/1711632650082-cc1f403a-62a6-4a78-9347-74ae26ebad23.png#averageHue=%23f2f2f3&clientId=u4539c149-39ec-4&from=paste&height=349&id=ube4badc7&originHeight=524&originWidth=1119&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=267152&status=done&style=none&taskId=u1809262c-41f5-4b16-bac5-de86081f5d2&title=&width=746" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="RSA加密"><a href="#RSA加密" class="headerlink" title="RSA加密"></a>RSA加密</h2><p><img src="https://cdn.nlark.com/yuque/0/2024/png/32697134/1711633983140-aec17442-bb47-4b31-85ac-5f3b01487aad.png#averageHue=%23f2f2f2&clientId=u4539c149-39ec-4&from=paste&height=556&id=ua4b437c0&originHeight=834&originWidth=859&originalType=binary&ratio=1.5&rotation=0&showTitle=false&size=367255&status=done&style=none&taskId=u417990d4-c6f5-40a2-b218-6ba221a3d21&title=&width=572.6666666666666" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/IOS%E9%80%86%E5%90%91/" class="category-chain-item">IOS逆向</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/IOS%E9%80%86%E5%90%91/" class="print-no-link">#IOS逆向</a>
+      
+        <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" class="print-no-link">#密码学</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OC加密标准库</div>
+      <div>https://ox130e07d.github.io/2024/03/29/OC加密标准库1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Noah</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年3月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Noah">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/03/29/OC%E5%8A%A0%E5%AF%86%E6%A0%87%E5%87%86%E5%BA%93/" title="OC加密标准库">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OC加密标准库</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+           Noah <i class="iconfont icon-love"></i> 0xSec <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
