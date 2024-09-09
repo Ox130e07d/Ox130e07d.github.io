@@ -1,0 +1,874 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Noah">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Java EE 分层模型Java EE（Java Platform, Enterprise Edition）分层模型是一个典型的企业级应用架构模型，通常分为以下几个层次：  客户端层（Client Layer）： 职责：负责与用户进行交互，通过浏览器、桌面应用程序或移动设备向用户展示界面，并接受用户输入。 示例：Web 浏览器、JavaFX 应用、Android 应用等。   表示层（Presen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分层模型与MVC">
+<meta property="og:url" content="https://ox130e07d.github.io/2024/09/10/%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B%E4%B8%8EMVC/index.html">
+<meta property="og:site_name" content="0xSec">
+<meta property="og:description" content="Java EE 分层模型Java EE（Java Platform, Enterprise Edition）分层模型是一个典型的企业级应用架构模型，通常分为以下几个层次：  客户端层（Client Layer）： 职责：负责与用户进行交互，通过浏览器、桌面应用程序或移动设备向用户展示界面，并接受用户输入。 示例：Web 浏览器、JavaFX 应用、Android 应用等。   表示层（Presen">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ox130e07d.github.io/img/javaee.png">
+<meta property="article:published_time" content="2024-09-09T16:30:56.000Z">
+<meta property="article:modified_time" content="2024-09-09T17:08:21.667Z">
+<meta property="article:author" content="Noah">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ox130e07d.github.io/img/javaee.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>分层模型与MVC - 0xSec</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"ox130e07d.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null},"woyaola":null,"cnzz":null},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong> </strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分层模型与MVC"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-09-10 00:30" pubdate>
+          2024年9月10日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          37 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">分层模型与MVC</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Java-EE-分层模型"><a href="#Java-EE-分层模型" class="headerlink" title="Java EE 分层模型"></a>Java EE 分层模型</h1><p>Java EE（Java Platform, Enterprise Edition）分层模型是一个典型的企业级应用架构模型，通常分为以下几个层次：</p>
+<ol>
+<li><strong>客户端层（Client Layer）</strong>：<ul>
+<li><strong>职责</strong>：负责与用户进行交互，通过浏览器、桌面应用程序或移动设备向用户展示界面，并接受用户输入。</li>
+<li><strong>示例</strong>：Web 浏览器、JavaFX 应用、Android 应用等。</li>
+</ul>
+</li>
+<li><strong>表示层（Presentation Layer）</strong>：<ul>
+<li><strong>职责</strong>：处理用户请求，将请求转发给业务逻辑层并返回结果给客户端。此层主要负责显示和处理与用户交互的内容。</li>
+<li><strong>技术</strong>：Servlets、JSP (JavaServer Pages)、JSF (JavaServer Faces)等。</li>
+<li><strong>示例</strong>：用户登录页面、数据展示页面等。</li>
+</ul>
+</li>
+<li><strong>业务逻辑层（Business Logic Layer &#x2F; Application Layer）</strong>：<ul>
+<li><strong>职责</strong>：处理核心业务逻辑，包括业务规则、数据处理等。它接收来自表示层的请求，进行逻辑处理后将结果返回给表示层。</li>
+<li><strong>技术</strong>：EJB (Enterprise JavaBeans)、POJOs (Plain Old Java Objects)、Spring Framework等。</li>
+<li><strong>示例</strong>：订单处理系统、用户认证系统等。</li>
+</ul>
+</li>
+<li><strong>数据访问层（Data Access Layer &#x2F; Persistence Layer）</strong>：<ul>
+<li><strong>职责</strong>：负责与数据库交互，执行数据的持久化操作。它提供了访问和操作数据库的方法，屏蔽了数据库的具体实现细节。</li>
+<li><strong>技术</strong>：JPA (Java Persistence API)、Hibernate、JDBC (Java Database Connectivity)等。</li>
+<li><strong>示例</strong>：数据库连接池管理、数据查询和存储等。</li>
+</ul>
+</li>
+<li><strong>企业信息系统层（Enterprise Information System Layer &#x2F; Integration Layer）</strong>：<ul>
+<li><strong>职责</strong>：与外部系统和服务进行交互，如消息队列、外部 Web 服务、ERP 系统等。它主要负责系统间的集成和数据交换。</li>
+<li><strong>技术</strong>：JMS (Java Message Service)、JCA (Java EE Connector Architecture)、Web Services (SOAP&#x2F;REST)等。</li>
+<li><strong>示例</strong>：与第三方支付系统的集成、使用消息队列处理异步任务等。</li>
+</ul>
+</li>
+</ol>
+<h2 id="Java-EE-分层模型图解"><a href="#Java-EE-分层模型图解" class="headerlink" title="Java EE 分层模型图解"></a>Java EE 分层模型图解</h2><figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-addition">+-------------------------------------+</span><br>|          客户端层 (Client Layer)    |<br><span class="hljs-addition">+-------------------------------------+</span><br>                 |<br>                 v<br><span class="hljs-addition">+-------------------------------------+</span><br>|        表示层 (Presentation Layer)  |<br><span class="hljs-addition">+-------------------------------------+</span><br>                 |<br>                 v<br><span class="hljs-addition">+-------------------------------------+</span><br>|      业务逻辑层 (Business Layer)     |<br><span class="hljs-addition">+-------------------------------------+</span><br>                 |<br>                 v<br><span class="hljs-addition">+-------------------------------------+</span><br>|   数据访问层 (Data Access Layer)    |<br><span class="hljs-addition">+-------------------------------------+</span><br>                 |<br>                 v<br><span class="hljs-addition">+-------------------------------------+</span><br>| 企业信息系统层 (Enterprise Layer)   |<br><span class="hljs-addition">+-------------------------------------+</span><br><br></code></pre></td></tr></table></figure>
+
+<h2 id="关键特点"><a href="#关键特点" class="headerlink" title="关键特点"></a>关键特点</h2><ul>
+<li><strong>松耦合</strong>：各层之间通过接口或契约进行交互，降低了各层之间的依赖性，方便系统的扩展和维护。</li>
+<li><strong>可重用性</strong>：每一层的组件可以独立开发和测试，增加了代码的可重用性。</li>
+<li><strong>分离关注点</strong>：将不同的功能和职责分离到不同的层次，简化了开发过程，使得每个层次关注特定的问题。</li>
+</ul>
+<p>这种分层架构模型使得 Java EE 应用具有良好的可扩展性、维护性和可靠性，是企业级应用开发中的标准架构。</p>
+<h1 id="MVC模式和MVC框架"><a href="#MVC模式和MVC框架" class="headerlink" title="MVC模式和MVC框架"></a>MVC模式和MVC框架</h1><p>在对Java代码进行审计的时候，基本遵从的逻辑是从数据的输入，数据的处理方式，结果的输出来审计是否存在可利用的漏洞点，此流程也基本遵循MVC的思想。MVC的三个核心分别是模型，视图，控制器，分离的思想更有利于在审计的时候更快速准确的找到问题点，无需在意其他不相关的问题。</p>
+<h2 id="JavaMVC模式"><a href="#JavaMVC模式" class="headerlink" title="JavaMVC模式"></a>JavaMVC模式</h2><h3 id="MVC概述"><a href="#MVC概述" class="headerlink" title="MVC概述"></a>MVC概述</h3><p>MVC中M（Model）是指数据模型，V（View）是指用户视图，C（Controller）是控制器， 它强调将应用程序分为三部分。</p>
+<ol>
+<li><strong>Model（模型）</strong>：</li>
+</ol>
+<ul>
+<li>表示应用程序的数据或业务逻辑。</li>
+<li>负责与数据库等数据源交互，处理数据的创建、读取、更新和删除（CRUD 操作）。</li>
+<li>与视图和控制器解耦，专注于处理数据和业务规则。</li>
+</ul>
+<ol start="2">
+<li><strong>View（视图）</strong>：</li>
+</ol>
+<ul>
+<li>负责向用户展示数据，通常是用户界面（UI）。</li>
+<li>从模型中获取数据，并以合适的形式展示给用户，如网页、图形界面等。</li>
+<li>不包含业务逻辑，只负责展示内容。</li>
+</ul>
+<ol start="3">
+<li><strong>Controller（控制器）</strong>：</li>
+</ol>
+<ul>
+<li>充当模型和视图之间的中介。</li>
+<li>负责处理用户的请求，调用模型中的数据处理方法，并将数据传递给视图进行展示。</li>
+<li>控制器接收来自视图的用户输入，更新模型并更新视图。</li>
+</ul>
+<h3 id="MVC工作流程"><a href="#MVC工作流程" class="headerlink" title="MVC工作流程"></a>MVC工作流程</h3><p>基本的工作流程为Controller层接受用户的请求，并调用对应的Model来进行处理，由Model使用逻辑处理用户的请求并返回数据给View层，再由View层将最后的结果呈现给用户。</p>
+<p>MVC模式使得视图层和业务层分离，再当业务的流程或是业务规则发生变化时，仅需要对Model层进行修改即可，使得Web应用更易于维护和修改。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/32697134/1725095863458-fcc5e474-6ee9-43fd-90a1-0536f05e5cd0.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="JavaMVC框架"><a href="#JavaMVC框架" class="headerlink" title="JavaMVC框架"></a>JavaMVC框架</h2><p>常见的 Java MVC 框架有以下几种，它们在功能、易用性、扩展性和性能方面各有特点：</p>
+<h3 id="Spring-MVC"><a href="#Spring-MVC" class="headerlink" title="Spring MVC"></a><strong>Spring MVC</strong></h3><p><strong>特点</strong>：</p>
+<ul>
+<li><strong>广泛使用</strong>：Spring MVC 是 Java 中最受欢迎的 MVC 框架之一，属于 Spring 框架的一部分。它提供了构建企业级 web 应用的全面解决方案。</li>
+<li><strong>依赖注入</strong>：通过 Spring 的依赖注入，开发者可以轻松管理对象的生命周期，减少了代码的耦合。</li>
+<li><strong>灵活的视图解析</strong>：支持多种视图技术，如 JSP、Thymeleaf、FreeMarker 等。</li>
+<li><strong>强大的 REST 支持</strong>：Spring MVC 为构建 RESTful API 提供了强大而灵活的支持，便于开发现代 web 应用。</li>
+<li><strong>集成性好</strong>：与 Spring 生态系统（如 Spring Boot、Spring Security 等）紧密集成，开发效率高。</li>
+</ul>
+<p><strong>适用场景</strong>：需要构建复杂的企业级应用，要求高扩展性和性能。</p>
+<h3 id="Struts-2"><a href="#Struts-2" class="headerlink" title="Struts 2"></a><strong>Struts 2</strong></h3><p><strong>特点</strong>：</p>
+<ul>
+<li><strong>开源框架</strong>：Struts 是 Apache 基金会维护的一个老牌 MVC 框架，基于 Servlet 和 JSP 技术。</li>
+<li><strong>面向请求</strong>：以请求为中心，框架通过 Action 类和 XML 配置文件来映射请求。</li>
+<li><strong>易扩展</strong>：提供了强大的插件机制，可以根据需求自定义功能。</li>
+<li><strong>灵活的表单处理</strong>：提供了一些自动化的数据转换和验证机制，简化了表单数据处理。</li>
+</ul>
+<p><strong>适用场景</strong>：适合构建中型企业应用，支持面向表单和请求的开发模式。</p>
+<h3 id="JSF-JavaServer-Faces"><a href="#JSF-JavaServer-Faces" class="headerlink" title="JSF (JavaServer Faces)"></a><strong>JSF (JavaServer Faces)</strong></h3><p><strong>特点</strong>：</p>
+<ul>
+<li><strong>基于组件的 UI 框架</strong>：JSF 主要是一个用户界面框架，侧重于组件化开发。开发者可以使用现成的 UI 组件（如按钮、输入框等）构建页面。</li>
+<li><strong>内置生命周期管理</strong>：JSF 内置了完整的请求&#x2F;响应生命周期管理，包括验证、数据转换、模型更新等。</li>
+<li><strong>可扩展性强</strong>：通过自定义组件库，开发者可以扩展 JSF 的 UI 组件。</li>
+<li><strong>与 Java EE 紧密集成</strong>：作为 Java EE 标准的一部分，JSF 与其他 Java EE 技术（如 EJB、JPA）紧密结合。</li>
+</ul>
+<p><strong>适用场景</strong>：适合需要大量 UI 组件的应用，常用于构建基于组件的企业级应用。</p>
+<h1 id="JavaWeb核心技术"><a href="#JavaWeb核心技术" class="headerlink" title="JavaWeb核心技术"></a>JavaWeb核心技术</h1><h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><p>Servlet运行在服务器上，负责接收客户端（如浏览器）的请求，处理请求，然后生成响应并返回给客户端。它的主要任务是在服务器和客户端之间进行通信和数据处理，通常用于处理动态网页内容（如用户登录、数据提交、处理表单等）。  </p>
+<h3 id="Servlet工作流程"><a href="#Servlet工作流程" class="headerlink" title="Servlet工作流程"></a>Servlet工作流程</h3><ol>
+<li><strong>客户端请求</strong>：用户在浏览器中输入网址，或通过表单提交数据，发送请求到服务器。</li>
+<li><strong>服务器调用 Servlet</strong>：服务器接收到请求后，将请求转发给相应的 Servlet 进行处理。</li>
+<li><strong>Servlet 处理请求</strong>：Servlet 根据请求的内容进行处理（如访问数据库、计算结果、生成动态内容等）。</li>
+<li><strong>Servlet 生成响应</strong>：处理完请求后，Servlet 会生成 HTTP 响应，并将结果返回给客户端（如返回 HTML 页面或 JSON 数据）。</li>
+<li><strong>客户端接收响应</strong>：浏览器接收到服务器返回的响应，展示结果给用户。</li>
+</ol>
+<h3 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h3><ol>
+<li><strong>初始化（init）</strong>：</li>
+</ol>
+<ul>
+<li>当客户端第一次请求 Servlet 时，服务器会加载并初始化该 Servlet。这个初始化阶段会调用 <code>init()</code> 方法，执行一次，主要用于准备资源（如数据库连接）。</li>
+</ul>
+<ol start="2">
+<li><strong>处理请求（service）</strong>：</li>
+</ol>
+<ul>
+<li>每当有客户端请求该 Servlet 时，服务器会调用 <code>service()</code> 方法，处理请求并生成响应。通常，这个方法会根据请求的类型调用 <code>doGet()</code> 或 <code>doPost()</code> 等方法。</li>
+</ul>
+<ol start="3">
+<li><strong>销毁（destroy）</strong>：</li>
+</ol>
+<ul>
+<li>当服务器关闭或需要释放资源时，会调用 <code>destroy()</code> 方法，销毁 Servlet，释放占用的资源（如关闭数据库连接）。</li>
+</ul>
+<h3 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h3><p>Servlet 是通过实现 <code>javax.servlet.Servlet</code> 接口来工作的，但通常开发者会继承 <code>HttpServlet</code> 类，专注于处理 HTTP 请求。常用的方法有：</p>
+<ul>
+<li><code>**init()**</code>：Servlet 初始化时调用，用于准备资源。</li>
+<li><code>**service()**</code>：每次请求都会调用，负责处理请求，通常开发者不会直接使用该方法，而是通过 <code>doGet()</code> 和 <code>doPost()</code> 等子方法处理。</li>
+<li><code>**doGet()**</code>：处理 GET 请求（例如从浏览器获取数据）。</li>
+<li><code>**doPost()**</code>：处理 POST 请求（例如表单提交）。</li>
+<li><code>**destroy()**</code>：Servlet 被销毁时调用，清理资源。</li>
+</ul>
+<h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> javax.servlet.ServletException;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServlet;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletResponse;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>        <span class="hljs-comment">// 设置响应的内容类型</span><br>        resp.setContentType(<span class="hljs-string">&quot;text/html&quot;</span>);<br><br>        <span class="hljs-comment">// 生成响应内容</span><br>        resp.getWriter().println(<span class="hljs-string">&quot;&lt;html&gt;&lt;body&gt;&quot;</span>);<br>        resp.getWriter().println(<span class="hljs-string">&quot;&lt;h1&gt;Hello, Servlet!&lt;/h1&gt;&quot;</span>);<br>        resp.getWriter().println(<span class="hljs-string">&quot;&lt;/body&gt;&lt;/html&gt;&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h3><h4 id="基于web-xml"><a href="#基于web-xml" class="headerlink" title="基于web.xml"></a>基于web.xml</h4><p><code>web.xml</code> 是 Java Web 应用的部署描述文件，位于应用的 <code>WEB-INF</code> 目录下。通过编辑 <code>web.xml</code>，你可以为 Servlet 进行配置，包括定义 Servlet 名称、映射 URL 路径等。  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">web-app</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;</span> </span><br><span class="hljs-tag">  <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="hljs-tag">  <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://xmlns.jcp.org/xml/ns/javaee </span></span><br><span class="hljs-string"><span class="hljs-tag">  http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;</span></span><br><span class="hljs-tag">  <span class="hljs-attr">version</span>=<span class="hljs-string">&quot;3.1&quot;</span>&gt;</span><br><br>  <span class="hljs-comment">&lt;!-- 定义一个 Servlet --&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">servlet</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">servlet-name</span>&gt;</span>HelloServlet<span class="hljs-tag">&lt;/<span class="hljs-name">servlet-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">servlet-class</span>&gt;</span>com.example.HelloServlet<span class="hljs-tag">&lt;/<span class="hljs-name">servlet-class</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">servlet</span>&gt;</span><br><br>  <span class="hljs-comment">&lt;!-- 定义 Servlet 的 URL 映射 --&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">servlet-mapping</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">servlet-name</span>&gt;</span>HelloServlet<span class="hljs-tag">&lt;/<span class="hljs-name">servlet-name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">url-pattern</span>&gt;</span>/hello<span class="hljs-tag">&lt;/<span class="hljs-name">url-pattern</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">servlet-mapping</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">web-app</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p><strong>配置说明：</strong></p>
+<ul>
+<li><code>**&lt;servlet&gt;**</code>** 标签**：定义 Servlet 名称和类路径，<code>&lt;servlet-name&gt;</code> 用来命名该 Servlet，<code>&lt;servlet-class&gt;</code> 指向实际的 Servlet 类（即实现业务逻辑的 Java 类）。</li>
+<li><code>**&lt;servlet-mapping&gt;**</code>** 标签**：定义 URL 路径和 Servlet 名称之间的映射关系，当客户端访问 <code>/hello</code> 路径时，服务器会调用 <code>HelloServlet</code> 进行处理。</li>
+</ul>
+<p>过这种方式，可以在 <code>web.xml</code> 中配置多个 Servlet，并为它们设置不同的 URL 映射。  </p>
+<h4 id="基于注释"><a href="#基于注释" class="headerlink" title="基于注释"></a>基于注释</h4><p>从 <strong>Servlet 3.0</strong> 开始，Java 支持通过注解来配置 Servlet，而不需要在 <code>web.xml</code> 中手动编写配置。这种方式更加简洁，尤其适用于较小的应用。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> javax.servlet.ServletException;<br><span class="hljs-keyword">import</span> javax.servlet.annotation.WebServlet;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServlet;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletResponse;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-meta">@WebServlet(name = &quot;HelloServlet&quot;, urlPatterns = &#123;&quot;/hello&quot;&#125;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">HelloServlet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">HttpServlet</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>        resp.setContentType(<span class="hljs-string">&quot;text/html&quot;</span>);<br>        resp.getWriter().println(<span class="hljs-string">&quot;&lt;h1&gt;Hello, Servlet!&lt;/h1&gt;&quot;</span>);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p><strong>配置说明：</strong></p>
+<ul>
+<li><code>**@WebServlet**</code>** 注解**：通过这个注解，直接在 Servlet 类上配置名称和 URL 映射。<code>name</code> 是 Servlet 的名称，<code>urlPatterns</code> 定义了该 Servlet 处理的 URL（这里是 <code>/hello</code>）。</li>
+<li>这样做不需要在 <code>web.xml</code> 中添加任何配置，Servlet 会自动根据注解进行注册。</li>
+</ul>
+<h2 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h2><p>Filter 的主要作用是对请求和响应进行某种形式的处理，类似于在请求到达目标 Servlet 或 JSP 之前增加一个“过滤”步骤。它能够：</p>
+<ol>
+<li><strong>过滤请求</strong>：在请求到达 Servlet 前对请求信息进行检查或修改，如验证用户权限、设置编码格式等。</li>
+<li><strong>过滤响应</strong>：在服务器生成响应后对响应信息进行处理，如压缩数据、修改响应内容等。</li>
+<li><strong>链式处理</strong>：多个过滤器可以串联在一起，形成一个过滤链，每个过滤器依次对请求和响应进行处理。</li>
+</ol>
+<h3 id="Filter工作流程"><a href="#Filter工作流程" class="headerlink" title="Filter工作流程"></a>Filter工作流程</h3><p>可以在请求到达目标前资源前进行预处理，也可以在相应返回客户端前进行后处理。多个Filter可以进行串联使用，按照配置的顺序依次处理请求和响应。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-number">1.</span> 客户端发起请求<br>      |<br>      v<br><span class="hljs-number">2.</span> 服务器检查 Filter 并开始执行<br>      |<br>      v<br><span class="hljs-number">3.</span> Filter <span class="hljs-number">1</span> 预处理请求<br>      |<br>      v<br><span class="hljs-number">4.</span> Filter <span class="hljs-number">2</span> 预处理请求<br>      |<br>      v<br><span class="hljs-number">5.</span> 请求传递到目标 Servlet 或 JSP<br>      |<br>      v<br><span class="hljs-number">6.</span> Servlet 处理业务逻辑，生成响应<br>      |<br>      v<br><span class="hljs-number">7.</span> Filter <span class="hljs-number">2</span> 后处理响应<br>      |<br>      v<br><span class="hljs-number">8.</span> Filter <span class="hljs-number">1</span> 后处理响应<br>      |<br>      v<br><span class="hljs-number">9.</span> 服务器将响应返回给客户端<br></code></pre></td></tr></table></figure>
+
+<h3 id="生命周期-1"><a href="#生命周期-1" class="headerlink" title="生命周期"></a>生命周期</h3><p>Filter 的生命周期与 Servlet 类似，主要包括三个阶段：</p>
+<ol>
+<li><strong>初始化（init）</strong>：Filter 被加载时调用，只执行一次，通常在这个阶段进行一些资源初始化的操作。</li>
+<li><strong>过滤请求和响应（doFilter）</strong>：每当有请求到来时，Filter 会通过 <code>doFilter()</code> 方法对请求和响应进行处理。</li>
+<li><strong>销毁（destroy）</strong>：Filter 被移除或服务器关闭时调用，通常在这个阶段释放资源。</li>
+</ol>
+<h3 id="代码示例-1"><a href="#代码示例-1" class="headerlink" title="代码示例"></a>代码示例</h3><p>Filter 是通过实现 <code>javax.servlet.Filter</code> 接口来实现的。需要重写其中的三个方法：<code>init()</code>、<code>doFilter()</code> 和 <code>destroy()</code>。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> javax.servlet.*;<br><span class="hljs-keyword">import</span> javax.servlet.http.HttpServletRequest;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LoggingFilter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Filter</span> &#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">(FilterConfig filterConfig)</span> <span class="hljs-keyword">throws</span> ServletException &#123;<br>        <span class="hljs-comment">// 过滤器初始化</span><br>        System.out.println(<span class="hljs-string">&quot;LoggingFilter initialized&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doFilter</span><span class="hljs-params">(ServletRequest request, ServletResponse response, FilterChain chain)</span> <br>            <span class="hljs-keyword">throws</span> IOException, ServletException &#123;<br>        <span class="hljs-comment">// 过滤请求，记录请求的URL</span><br>        <span class="hljs-type">HttpServletRequest</span> <span class="hljs-variable">httpRequest</span> <span class="hljs-operator">=</span> (HttpServletRequest) request;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">url</span> <span class="hljs-operator">=</span> httpRequest.getRequestURI();<br>        System.out.println(<span class="hljs-string">&quot;Request URL: &quot;</span> + url);<br><br>        <span class="hljs-comment">// 继续处理请求，传递给下一个 Filter 或目标资源（Servlet、JSP）</span><br>        chain.doFilter(request, response);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">destroy</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 释放资源</span><br>        System.out.println(<span class="hljs-string">&quot;LoggingFilter destroyed&quot;</span>);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="配置方法-1"><a href="#配置方法-1" class="headerlink" title="配置方法"></a>配置方法</h3><h4 id="基于web-xml-1"><a href="#基于web-xml-1" class="headerlink" title="基于web.xml"></a>基于web.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">filter</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span>LoggingFilter<span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">filter-class</span>&gt;</span>com.example.LoggingFilter<span class="hljs-tag">&lt;/<span class="hljs-name">filter-class</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">filter</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">filter-mapping</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">filter-name</span>&gt;</span>LoggingFilter<span class="hljs-tag">&lt;/<span class="hljs-name">filter-name</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">url-pattern</span>&gt;</span>/*<span class="hljs-tag">&lt;/<span class="hljs-name">url-pattern</span>&gt;</span> <span class="hljs-comment">&lt;!-- 这个 Filter 应用于所有 URL --&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">filter-mapping</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="基于注释-1"><a href="#基于注释-1" class="headerlink" title="基于注释"></a>基于注释</h4><p>从 Servlet 3.0 开始，Filter 可以使用注解进行配置，代码会更加简洁。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> javax.servlet.*;<br><span class="hljs-keyword">import</span> javax.servlet.annotation.WebFilter;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-meta">@WebFilter(&quot;/*&quot;)</span> <span class="hljs-comment">// 应用于所有请求</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">LoggingFilter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Filter</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">(FilterConfig filterConfig)</span> <span class="hljs-keyword">throws</span> ServletException &#123;<br>        System.out.println(<span class="hljs-string">&quot;LoggingFilter initialized&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doFilter</span><span class="hljs-params">(ServletRequest request, ServletResponse response, FilterChain chain)</span><br>            <span class="hljs-keyword">throws</span> IOException, ServletException &#123;<br>        System.out.println(<span class="hljs-string">&quot;LoggingFilter: Request received&quot;</span>);<br>        chain.doFilter(request, response);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">destroy</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;LoggingFilter destroyed&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="Listener"><a href="#Listener" class="headerlink" title="Listener"></a>Listener</h2><h3 id="Listener-的作用"><a href="#Listener-的作用" class="headerlink" title="Listener 的作用"></a>Listener 的作用</h3><p>Listener 主要用于在特定的生命周期事件发生时执行某些操作。常见的应用场景包括：</p>
+<ol>
+<li><strong>监听 Web 应用启动和关闭</strong>：在 Web 应用启动时初始化资源（如数据库连接），在应用关闭时释放资源。</li>
+<li><strong>监听用户请求的创建和销毁</strong>：在每个请求到达或结束时进行日志记录、统计访问量等。</li>
+<li><strong>监听会话的创建和销毁</strong>：在用户会话创建时记录用户登录信息，销毁时清理会话相关数据。</li>
+<li><strong>监听属性的变化</strong>：当某个对象的属性（如会话或应用中的变量）被添加、修改或删除时，执行相应的操作。</li>
+</ol>
+<h3 id="Listener-工作流程"><a href="#Listener-工作流程" class="headerlink" title="Listener 工作流程"></a>Listener 工作流程</h3><ol>
+<li><strong>应用启动&#x2F;关闭</strong>：<code>ServletContextListener</code> 监听应用的启动和关闭事件。</li>
+<li><strong>会话创建&#x2F;销毁</strong>：<code>HttpSessionListener</code> 监听每个用户会话的创建和销毁，通常用于登录用户的跟踪。</li>
+<li><strong>请求开始&#x2F;结束</strong>：<code>ServletRequestListener</code> 监听每个请求的到达和结束，常用于日志记录和统计请求处理时间。</li>
+<li><strong>属性变化</strong>：属性监听器会在对象的属性变化时（添加、修改或删除）执行对应的操作。</li>
+</ol>
+<h3 id="常见的-Listener-类型"><a href="#常见的-Listener-类型" class="headerlink" title="常见的 Listener 类型"></a>常见的 Listener 类型</h3><p>在 Java Web 中，主要有三类监听器，分别对应不同的 Web 对象的生命周期或属性变化：</p>
+<ol>
+<li><strong>ServletContextListener</strong>（监听 Web 应用的生命周期）</li>
+</ol>
+<ul>
+<li>监听整个 Web 应用的启动和关闭。</li>
+<li>常用于在应用启动时执行初始化工作，如加载配置文件、初始化数据库连接等。</li>
+<li>在应用关闭时进行资源的释放和清理。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyContextListener</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ServletContextListener</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">contextInitialized</span><span class="hljs-params">(ServletContextEvent sce)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Web 应用启动&quot;</span>);<br>        <span class="hljs-comment">// 在这里进行初始化工作</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">contextDestroyed</span><span class="hljs-params">(ServletContextEvent sce)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Web 应用关闭&quot;</span>);<br>        <span class="hljs-comment">// 在这里释放资源</span><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><strong>HttpSessionListener</strong>（监听会话的创建和销毁）</li>
+</ol>
+<ul>
+<li>监听用户会话的创建和销毁事件。</li>
+<li>常用于统计在线用户数量、记录用户登录信息等。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MySessionListener</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">HttpSessionListener</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">sessionCreated</span><span class="hljs-params">(HttpSessionEvent se)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;会话创建&quot;</span>);<br>        <span class="hljs-comment">// 执行会话创建时的逻辑</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">sessionDestroyed</span><span class="hljs-params">(HttpSessionEvent se)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;会话销毁&quot;</span>);<br>        <span class="hljs-comment">// 执行会话销毁时的逻辑</span><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li><strong>ServletRequestListener</strong>（监听请求的创建和销毁）</li>
+</ol>
+<ul>
+<li>监听每个请求的开始和结束。</li>
+<li>常用于记录日志、统计请求的处理时间、处理请求前后的数据等。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyRequestListener</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ServletRequestListener</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">requestInitialized</span><span class="hljs-params">(ServletRequestEvent sre)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;请求创建&quot;</span>);<br>        <span class="hljs-comment">// 处理请求初始化时的逻辑</span><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">requestDestroyed</span><span class="hljs-params">(ServletRequestEvent sre)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;请求销毁&quot;</span>);<br>        <span class="hljs-comment">// 处理请求销毁时的逻辑</span><br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="属性监听器"><a href="#属性监听器" class="headerlink" title="属性监听器"></a>属性监听器</h3><p>属性监听器主要用于监听对象中属性的变化，如当属性被添加、移除或修改时触发。常见的属性监听器有：</p>
+<ol>
+<li><strong>HttpSessionAttributeListener</strong>：监听会话属性的添加、修改和删除。</li>
+<li><strong>ServletContextAttributeListener</strong>：监听应用范围属性的添加、修改和删除。</li>
+<li><strong>ServletRequestAttributeListener</strong>：监听请求属性的添加、修改和删除。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MySessionAttributeListener</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">HttpSessionAttributeListener</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">attributeAdded</span><span class="hljs-params">(HttpSessionBindingEvent event)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;属性添加：&quot;</span> + event.getName());<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">attributeRemoved</span><span class="hljs-params">(HttpSessionBindingEvent event)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;属性移除：&quot;</span> + event.getName());<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">attributeReplaced</span><span class="hljs-params">(HttpSessionBindingEvent event)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;属性修改：&quot;</span> + event.getName());<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="Listener-的配置"><a href="#Listener-的配置" class="headerlink" title="Listener 的配置"></a>Listener 的配置</h3><p>Listener 可以通过两种方式配置：<strong>在 <strong><code>**web.xml**</code></strong> 文件中配置</strong>或<strong>使用注解配置</strong>。</p>
+<h4 id="基于web-xml-2"><a href="#基于web-xml-2" class="headerlink" title="基于web.xml"></a>基于web.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">listener</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">listener-class</span>&gt;</span>com.example.MyContextListener<span class="hljs-tag">&lt;/<span class="hljs-name">listener-class</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">listener</span>&gt;</span><br><br></code></pre></td></tr></table></figure>
+
+<h4 id="基于注释-2"><a href="#基于注释-2" class="headerlink" title="基于注释"></a>基于注释</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> javax.servlet.annotation.WebListener;<br><br><span class="hljs-meta">@WebListener</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MyContextListener</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ServletContextListener</span> &#123;<br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">contextInitialized</span><span class="hljs-params">(ServletContextEvent sce)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Web 应用启动&quot;</span>);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">contextDestroyed</span><span class="hljs-params">(ServletContextEvent sce)</span> &#123;<br>        System.out.println(<span class="hljs-string">&quot;Web 应用关闭&quot;</span>);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分层模型与MVC</div>
+      <div>https://ox130e07d.github.io/2024/09/10/分层模型与MVC/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Noah</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年9月10日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/03/29/Hello-Noah/" title="Hello Noah">
+                        <span class="hidden-mobile">Hello Noah</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+           <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div style="font-size: 0.85rem"> <span id="timeDate">载入天数...</span> <span id="times">载入时分秒...</span> <script src="/js/duration.js"></script> </div> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
